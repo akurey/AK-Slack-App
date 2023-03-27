@@ -1,0 +1,11 @@
+.DS_Store
+
+# intelliJ
+.idea
+
+# node/npm
+node_modules/
+package-lock.json
+
+# serverless
+.serverless/
