@@ -30,13 +30,8 @@ app.shortcut('messageUpdateSSOT', async ({ shortcut, ack, client, logger }) => {
 // Handles view submission request with the callback id from the modal/form
 app.view({ callback_id: 'SSOTRequest', type: 'view_submission'}, async ({ ack, body, view, client, logger }) => {
     await ack();
-    const valuesArr = [];
 
-    Object.keys(view.state.values).map(key => {
-        valuesArr.push(view.state.values[key]);
-    })
-
-    const [project, action, notes, conversations] = valuesArr;
+    const [project, action, notes, conversations] = Object.values(view.state.values);
 
     console.log("Selected Project: " + project['projectSelect']['selected_option']['value']);
     console.log("Selected Action: " + action['actionSelect']['selected_option']['value']);
