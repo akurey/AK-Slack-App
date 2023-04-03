@@ -1,6 +1,5 @@
 const { App, AwsLambdaReceiver } = require('@slack/bolt');
 const { FORM_MODAL } = require('./components/slackForm')
-const signature = require('./verifySignature');
 
 // Initialize custom receiver
 const awsLambdaReceiver = new AwsLambdaReceiver({
@@ -13,20 +12,20 @@ const app = new App({
     receiver: awsLambdaReceiver,
 });
 
+// Handles event for shortcut with callbackId: messageUpdateSSOT and triggers the modal
 app.shortcut('messageUpdateSSOT', async ({ shortcut, ack, client, logger }) => {
-   try {
-       await ack();
-       console.log(shortcut);
-       const result = await client.views.open({
-           trigger_id: shortcut.trigger_id,
-           view: FORM_MODAL
-       });
-    console.log("result is: " + result);
-   } catch (error) {
-       console.error(error);
-   }
-});
+    try {
+        await ack();
 
+        await client.views.open({
+            trigger_id: shortcut.trigger_id,
+            view: FORM_MODAL
+        });
+
+    } catch (error) {
+        console.error(error);
+    }
+});
 // Handles view submission request with the callback id from the modal/form
 app.view({ callback_id: 'SSOTRequest', type: 'view_submission'}, async ({ ack, body, view, client, logger }) => {
     await ack();
