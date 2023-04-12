@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@octokit/oauth-app": "^4.2.0",
     "@slack/bolt": "^3.12.2"
   },
   "devDependencies": {

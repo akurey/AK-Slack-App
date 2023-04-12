@@ -1,6 +1,4 @@
-const fs = require('fs');
-const rawData = fs.readFileSync('./data.json');
-const config= JSON.parse(rawData);
+const { getProjectList, getActions } = require('./jsonDataHanlder');
 
 // Handle the list from the JSON data and returns the object for the modal
 const addOptions = (property) => {
@@ -48,7 +46,7 @@ const FORM_MODAL = JSON.stringify({
                     emoji: true,
                     text: "Projects"
                 },
-                options: addOptions(config['projectList'])
+                options: addOptions(getProjectList())
             }
         },
         {
@@ -66,7 +64,7 @@ const FORM_MODAL = JSON.stringify({
                     emoji: true,
                     text: "Actions"
                 },
-                options: addOptions(config['actions'])
+                options: addOptions(getActions())
             }
         },
         {

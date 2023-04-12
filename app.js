@@ -1,7 +1,8 @@
 const { App, AwsLambdaReceiver } = require('@slack/bolt');
 const { FORM_MODAL } = require('./handlers/slackFormHandler');
+const { getChannels } = require('./handlers/jsonDataHanlder');
 const { getMessageBlock } = require('./handlers/slackMessageHandler');
-let userId, message;
+let userId, message = '';
 
 // Initialize custom receiver
 const awsLambdaReceiver = new AwsLambdaReceiver({
@@ -25,7 +26,9 @@ app.shortcut('messageUpdateSSOT', async ({ shortcut, ack, client, logger }) => {
         });
 
          userId = shortcut.user.id;
-         message = shortcut.message.text;
+         if (shortcut.message.text !== undefined || shortcut.message.text !== null) {
+             message = shortcut.message.text;
+         }
     } catch (error) {
         console.error(error);
     }
@@ -41,15 +44,16 @@ app.view({ callback_id: 'SSOTRequest', type: 'view_submission'}, async ({ ack, b
     notes = notes['notesAction']['value'];
     conversations =  conversations['conversationsAction']['selected_conversations'];
     const userName = await getUserName();
+    getChannel(conversations, projectId, actionId);
     await publishMessage(userName, projectId, actionId, notes, conversations, message);
 });
 
 
 // Request to SLACK PAI to publish a message to the list of channels selected
-const publishMessage = async (username, project, action, notes, conversations, message) => {
+const publishMessage = async (username, project, action, notes, channels, message) => {
     try {
         const messageBlock = getMessageBlock(username, project, action, notes, message);
-        conversations.map( async channel => {
+        channels.map( async channel => {
             await app.client.chat.postMessage({
                 text: '',
                 blocks: messageBlock,
@@ -59,12 +63,18 @@ const publishMessage = async (username, project, action, notes, conversations, m
     } catch (error) {
         console.error(error);
     }
-}
+};
+
 // Request to SLACK API to get the user complete name
 const getUserName = async () => {
     const username = await app.client.users.info({user: userId});
     return username.user.real_name;
 }
+
+const getChannel = (conversations, projectId, actionId) => {
+    let channels = [];
+    channels.push(conversations);
+};
 
 // Handle Lambda function event
 module.exports.handler = async (event, context, callback) => {
