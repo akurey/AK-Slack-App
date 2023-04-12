@@ -1,5 +1,7 @@
 const { App, AwsLambdaReceiver } = require('@slack/bolt');
-const { FORM_MODAL } = require('./components/slackForm')
+const { FORM_MODAL } = require('./handlers/slackFormHandler');
+const { getMessageBlock } = require('./handlers/slackMessageHandler');
+let userId, message;
 
 // Initialize custom receiver
 const awsLambdaReceiver = new AwsLambdaReceiver({
@@ -22,6 +24,8 @@ app.shortcut('messageUpdateSSOT', async ({ shortcut, ack, client, logger }) => {
             view: FORM_MODAL
         });
 
+         userId = shortcut.user.id;
+         message = shortcut.message.text;
     } catch (error) {
         console.error(error);
     }
@@ -31,13 +35,36 @@ app.shortcut('messageUpdateSSOT', async ({ shortcut, ack, client, logger }) => {
 app.view({ callback_id: 'SSOTRequest', type: 'view_submission'}, async ({ ack, body, view, client, logger }) => {
     await ack();
 
-    const [project, action, notes, conversations] = Object.values(view.state.values);
-
-    console.log("Selected Project: " + project['projectSelect']['selected_option']['value']);
-    console.log("Selected Action: " + action['actionSelect']['selected_option']['value']);
-    console.log("Added Additional Notes: " + notes['notesAction']['value']);
-    console.log("Selected Conversations id: " + conversations['conversationsAction']['selected_conversations']);
+    let [project, action, notes, conversations] = Object.values(view.state.values);
+    project = project['projectSelect']['selected_option']['value'];
+    action = action['actionSelect']['selected_option']['value'];
+    notes = notes['notesAction']['value'];
+    conversations =  conversations['conversationsAction']['selected_conversations'];
+    const userName = await getUserName();
+    await publishMessage(userName, project, action, notes, conversations, message);
 });
+
+
+// Request to SLACK PAI to publish a message to the list of channels selected
+const publishMessage = async (username, project, action, notes, conversations, message) => {
+    try {
+        const messageBlock = getMessageBlock(username, project, action, notes, message);
+        conversations.map( async channel => {
+            await app.client.chat.postMessage({
+                blocks: messageBlock,
+                text: '',
+                channel: channel
+            });
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}
+// Request to SLACK API to get the user complete name
+const getUserName = async () => {
+    const username = await app.client.users.info({user: userId});
+    return username.user.real_name;
+}
 
 // Handle Lambda function event
 module.exports.handler = async (event, context, callback) => {
