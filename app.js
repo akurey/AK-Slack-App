@@ -6,7 +6,7 @@ const awsLambdaReceiver = new AwsLambdaReceiver({
     signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
 
-// Initializes app with your bot token and the AWS Lambda ready receiver
+// Initializes app with bot token and the AWS Lambda ready receiver
 const app = new App({
     token: process.env.SLACK_BOT_TOKEN,
     receiver: awsLambdaReceiver,
@@ -26,6 +26,7 @@ app.shortcut('messageUpdateSSOT', async ({ shortcut, ack, client, logger }) => {
         console.error(error);
     }
 });
+
 // Handles view submission request with the callback id from the modal/form
 app.view({ callback_id: 'SSOTRequest', type: 'view_submission'}, async ({ ack, body, view, client, logger }) => {
     await ack();

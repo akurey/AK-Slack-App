@@ -1,0 +1,44 @@
+{
+  "projectList": ["Agex", "Carely"],
+  "actions" : ["Requirement", "Technical", "Scope", "Notes"],
+  "projects": {
+    "agex" : {
+      "active" : true,
+      "notifications" : {
+        "requirement": {
+          "channels": ["agex"],
+          "people": ["velvet", "oscar"]
+        },
+        "technical": {
+          "channels": ["agex"],
+          "people": ["alejandro", "fernando"]
+        },
+        "scope": {
+          "channels": ["agex"],
+          "people": ["velvet", "oscar"]
+        },
+        "notes": {
+          "channels": ["agex"],
+          "people": ["velvet", "oscar"]
+        }
+      },
+      "extensions" : {
+        "github": {
+          "projectFile" : "https://github.com/akurey/aktech/blob/master/projects/fintech/agex.md",
+          "requirement": {
+            "section" : "## Requirements"
+          },
+          "technical": {
+            "section" : "## Technical Notes"
+          },
+          "scope": {
+            "section" : "## Scope"
+          },
+          "notes": {
+            "section" : "## Additional Notes"
+          }
+        }
+      }
+    }
+  }
+}
