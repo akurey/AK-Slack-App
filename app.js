@@ -35,13 +35,13 @@ app.shortcut('messageUpdateSSOT', async ({ shortcut, ack, client, logger }) => {
 app.view({ callback_id: 'SSOTRequest', type: 'view_submission'}, async ({ ack, body, view, client, logger }) => {
     await ack();
 
-    let [project, action, notes, conversations] = Object.values(view.state.values);
-    project = project['projectSelect']['selected_option']['value'];
-    action = action['actionSelect']['selected_option']['value'];
+    let [projectId, actionId, notes, conversations] = Object.values(view.state.values);
+    projectId = projectId['projectSelect']['selected_option']['value'];
+    actionId = actionId['actionSelect']['selected_option']['value'];
     notes = notes['notesAction']['value'];
     conversations =  conversations['conversationsAction']['selected_conversations'];
     const userName = await getUserName();
-    await publishMessage(userName, project, action, notes, conversations, message);
+    await publishMessage(userName, projectId, actionId, notes, conversations, message);
 });
 
 
@@ -51,8 +51,8 @@ const publishMessage = async (username, project, action, notes, conversations, m
         const messageBlock = getMessageBlock(username, project, action, notes, message);
         conversations.map( async channel => {
             await app.client.chat.postMessage({
-                blocks: messageBlock,
                 text: '',
+                blocks: messageBlock,
                 channel: channel
             });
         });

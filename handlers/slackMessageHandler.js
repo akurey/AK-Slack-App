@@ -1,4 +1,10 @@
-const getMessageBlock = (username, project, actionType, notes, message) => {
+const fs = require('fs');
+const rawData = fs.readFileSync('./data.json');
+const config= JSON.parse(rawData);
+
+const getMessageBlock = (username, projectId, actionId, notes, message) => {
+    const project = config['projectList'][projectId];
+    const actionType = config['actions'][actionId];
     const messageBlock = [
         {
             type: "header",

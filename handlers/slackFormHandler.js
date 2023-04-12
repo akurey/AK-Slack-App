@@ -6,7 +6,7 @@ const config= JSON.parse(rawData);
 const addOptions = (property) => {
     const options = [];
     for (let i = 0; i < property.length; i++) {
-        options.push({text: {type: 'plain_text', emoji: true, text: property[i]}, value: `value-${i}`});
+        options.push({text: {type: 'plain_text', emoji: true, text: property[i]}, value: `${i}`});
     }
     return options;
 }
