@@ -1,6 +1,6 @@
 const { App, AwsLambdaReceiver } = require('@slack/bolt');
 const { FORM_MODAL } = require('./handlers/slackFormHandler');
-const { getChannels } = require('./handlers/jsonDataHanlder');
+const { getEmails, getChannels } = require('./handlers/jsonDataHanlder');
 const { getMessageBlock } = require('./handlers/slackMessageHandler');
 let userId, message = '';
 
@@ -43,21 +43,22 @@ app.view({ callback_id: 'SSOTRequest', type: 'view_submission'}, async ({ ack, b
     actionId = actionId['actionSelect']['selected_option']['value'];
     notes = notes['notesAction']['value'];
     conversations =  conversations['conversationsAction']['selected_conversations'];
+
     const userName = await getUserName();
-    getChannel(conversations, projectId, actionId);
+    conversations = await getConversations(conversations, projectId, actionId);
     await publishMessage(userName, projectId, actionId, notes, conversations, message);
 });
 
 
 // Request to SLACK PAI to publish a message to the list of channels selected
-const publishMessage = async (username, project, action, notes, channels, message) => {
+const publishMessage = async (username, project, action, notes, conversations, message) => {
     try {
         const messageBlock = getMessageBlock(username, project, action, notes, message);
-        channels.map( async channel => {
+        conversations.map( async conversation => {
             await app.client.chat.postMessage({
                 text: '',
                 blocks: messageBlock,
-                channel: channel
+                channel: conversation
             });
         });
     } catch (error) {
@@ -71,10 +72,70 @@ const getUserName = async () => {
     return username.user.real_name;
 }
 
-const getChannel = (conversations, projectId, actionId) => {
-    let channels = [];
-    channels.push(conversations);
+// Handles the conversations selected from the modal and the JSON data
+const getConversations = async (conversations, projectId, actionId) => {
+    let userEmails = getEmails(projectId, actionId);
+    let channels = getChannels(projectId, actionId);
+
+    const conversationList = [];
+    for (const email of userEmails) {
+        conversationList.push(await getUserIdByEmail(email));
+    }
+    conversations.map(conversation => {
+        conversationList.push(conversation);
+    });
+
+    /**
+     * This for was implemented this way since there is a known bug on the slack apy where
+     * if the application has joined the channels, requesting the api
+     * conversations.list with parameter: types = "private_channel,public_channel" only returns public channels
+     * instead of both public and private channels
+     */
+    for (const channel of channels) {
+        let channelId = await getPrivateChannelId(channel);
+        if (channelId === undefined || channelId === null) {
+            channelId = await getPublicChannelId(channel);
+        }
+        conversationList.push(channelId);
+    }
+    return removeDuplicates(conversationList);
 };
+
+// Request to SLACK API to get user id from an email
+const getUserIdByEmail =  async (email) => {
+    try {
+        const userData = await app.client.users.lookupByEmail({email: email});
+        return userData['user']['id'];
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+// Request to SLACK API to get private channel id with the input name
+const getPrivateChannelId = async (channelName) => {
+    try {
+        const channelList = await app.client.conversations.list({types: "private_channel"});
+        const filtered = channelList.channels.filter(item => item.name === channelName)[0];
+        return filtered['id'];
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+// Request to SLACK API to get public channel id with the input name
+const getPublicChannelId = async (channelName) => {
+    try {
+        const channelList = await app.client.conversations.list({types: "public_channel"});
+        const filtered = channelList.channels.filter(item => item.name === channelName)[0];
+        return filtered['id'];
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+const removeDuplicates = (arr) => {
+    return arr.filter((item, index) => arr.indexOf(item) === index);
+}
 
 // Handle Lambda function event
 module.exports.handler = async (event, context, callback) => {

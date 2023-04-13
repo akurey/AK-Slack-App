@@ -10,18 +10,23 @@ const getActions = () => {
     return config['actions'];
 };
 
+const getEmails = (projectId, actionId) => {
+    const projectName = getProjectList()[projectId].toLowerCase();
+    const actionType = getActions()[actionId].toLowerCase();
+    const notifications = config['projects'][projectName]['notifications'][actionType];
+    return notifications['people'];
+};
+
 const getChannels = (projectId, actionId) => {
     const projectName = getProjectList()[projectId].toLowerCase();
     const actionType = getActions()[actionId].toLowerCase();
     const notifications = config['projects'][projectName]['notifications'][actionType];
-    let channels = [];
-    channels.push(notifications['channels']);
-    channels.push(notifications['people']);
-    return channels
-};
+    return notifications['channels'];
+}
 
 module.exports = {
     getProjectList,
     getActions,
+    getEmails,
     getChannels
 }
