@@ -6,25 +6,63 @@
       "active" : true,
       "notifications" : {
         "requirement": {
-          "channels": ["agex"],
-          "people": ["velvet", "oscar"]
+          "channels": ["ak-website-design", "akurey-ssot"],
+          "people": ["skopper@akurey.com", "jabarboza@akurey.com"]
         },
         "technical": {
-          "channels": ["agex"],
-          "people": ["alejandro", "fernando"]
+          "channels": ["akurey-ssot"],
+          "people": ["kafay.ng@akurey.com", "skopper@akurey.com"]
         },
         "scope": {
-          "channels": ["agex"],
-          "people": ["velvet", "oscar"]
+          "channels": ["akurey-ssot"],
+          "people": ["jabarboza@akurey.com", "kafay.ng@akurey.com"]
         },
         "notes": {
-          "channels": ["agex"],
-          "people": ["velvet", "oscar"]
+          "channels": ["akurey-ssot"],
+          "people": ["skopper@akurey.com", "kafay.ng@akurey.com"]
         }
       },
       "extensions" : {
         "github": {
           "projectFile" : "https://github.com/akurey/aktech/blob/master/projects/fintech/agex.md",
+          "requirement": {
+            "section" : "## Requirements"
+          },
+          "technical": {
+            "section" : "## Technical Notes"
+          },
+          "scope": {
+            "section" : "## Scope"
+          },
+          "notes": {
+            "section" : "## Additional Notes"
+          }
+        }
+      }
+    },
+    "carely" : {
+      "active" : true,
+      "notifications" : {
+        "requirement": {
+          "channels": ["akurey-ssot"],
+          "people": ["skopper@akurey.com", "jabarboza@akurey.com"]
+        },
+        "technical": {
+          "channels": ["akurey-ssot"],
+          "people": ["kafay.ng@akurey.com", "skopper@akurey.com"]
+        },
+        "scope": {
+          "channels": ["akurey-ssot"],
+          "people": ["jabarboza@akurey.com", "kafay.ng@akurey.com"]
+        },
+        "notes": {
+          "channels": ["akurey-ssot"],
+          "people": ["skopper@akurey.com", "kafay.ng@akurey.com"]
+        }
+      },
+      "extensions" : {
+        "github": {
+          "projectFile" : "https://github.com/akurey/aktech/blob/master/projects/fintech/carely.md",
           "requirement": {
             "section" : "## Requirements"
           },
