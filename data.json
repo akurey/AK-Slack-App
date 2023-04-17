@@ -63,7 +63,8 @@
       },
       "extensions" : {
         "github": {
-          "projectFile" : "https://github.com/akurey/aktech/blob/master/projects/fintech/carely.md",
+          "repository": "https://github.com/akurey/aktech.git",
+          "projectFile" : "https://github.com/akurey/aktech/blob/master/project-slack-ssot.md",
           "requirement": {
             "section" : "## Requirements"
           },
