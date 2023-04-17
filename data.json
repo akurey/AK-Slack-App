@@ -11,7 +11,7 @@
         },
         "technical": {
           "channels": ["akurey-ssot"],
-          "people": ["kafay.ng@akurey.com", "skopper@akurey.com"]
+          "people": ["kafay.ng@akurey.com"]
         },
         "scope": {
           "channels": ["akurey-ssot"],
@@ -24,7 +24,8 @@
       },
       "extensions" : {
         "github": {
-          "projectFile" : "https://github.com/akurey/aktech/blob/master/projects/fintech/agex.md",
+          "repository": "https://github.com/akurey/AK-Projects-Single-Source.git",
+          "projectFile" : "https://github.com/akurey/AK-Projects-Single-Source/blob/main/Slack-Application/project-slack-ssot.md",
           "requirement": {
             "section" : "## Requirements"
           },

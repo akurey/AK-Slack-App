@@ -3,7 +3,7 @@ const rawData = fs.readFileSync('./data.json');
 const config= JSON.parse(rawData);
 
 const getProjectList = () => {
-  return config['projectList'];
+    return config['projectList'];
 };
 
 const getActions = () => {
@@ -24,9 +24,26 @@ const getChannels = (projectId, actionId) => {
     return notifications['channels'];
 }
 
+const getRepoInfo = (projectId) => {
+    const projectName = getProjectList()[projectId].toLowerCase();
+    const extension = config['projects'][projectName]['extensions']['github'];
+    const path = extension['repository'];
+    const projectFile = extension['projectFile'];
+    return {repoPath: path, fileInfo: getRepoFileInfo(projectFile)};
+};
+
+const getRepoFileInfo = (filePath) => {
+    const branchFileInfo = filePath.slice(filePath.indexOf('/blob/')+6);
+    const pathDividerIdx = branchFileInfo.indexOf('/');
+    const branchName =  branchFileInfo.slice(0,pathDividerIdx);
+    const fileDir = branchFileInfo.slice(pathDividerIdx+1);
+    return {branchName: branchName, filePath: fileDir};
+};
+
 module.exports = {
     getProjectList,
     getActions,
     getEmails,
-    getChannels
+    getChannels,
+    getRepoInfo
 }
