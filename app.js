@@ -1,7 +1,8 @@
 const { App, AwsLambdaReceiver } = require('@slack/bolt');
 const { FORM_MODAL } = require('./handlers/slackFormHandler');
-const { getEmails, getChannels } = require('./handlers/jsonDataHanlder');
+const { getChannels, getRepoInfo, getEmails } = require('./handlers/jsonDataHanlder');
 const { getMessageBlock } = require('./handlers/slackMessageHandler');
+const { gitRepoHandle } = require('./utils/githubUtils');
 let userId, message = '';
 
 // Initialize custom receiver
@@ -45,6 +46,7 @@ app.view({ callback_id: 'SSOTRequest', type: 'view_submission'}, async ({ ack, b
     conversations =  conversations['conversationsAction']['selected_conversations'];
 
     const userName = await getUserName();
+    await gitRepoHandle(getRepoInfo(projectId));
     conversations = await getConversations(conversations, projectId, actionId);
     await publishMessage(userName, projectId, actionId, notes, conversations, message);
 });
@@ -107,6 +109,9 @@ const getUserIdByEmail =  async (email) => {
         const userData = await app.client.users.lookupByEmail({email: email});
         return userData['user']['id'];
     } catch (error) {
+        /**
+         * This console.error will be constantly thrown because of the slack private and public channels listing bug
+         */
         console.error(error);
     }
 };
@@ -118,7 +123,10 @@ const getPrivateChannelId = async (channelName) => {
         const filtered = channelList.channels.filter(item => item.name === channelName)[0];
         return filtered['id'];
     } catch (error) {
-        console.error(error);
+        /**
+         * This console.error will be constantly thrown because of the slack private and public channels listing bug
+         */
+        console.log(error);
     }
 };
 
@@ -129,7 +137,7 @@ const getPublicChannelId = async (channelName) => {
         const filtered = channelList.channels.filter(item => item.name === channelName)[0];
         return filtered['id'];
     } catch (error) {
-        console.error(error);
+        console.log(error);
     }
 };
 

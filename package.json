@@ -9,8 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@octokit/oauth-app": "^4.2.0",
-    "@slack/bolt": "^3.12.2"
+    "@slack/bolt": "^3.12.2",
+    "nodegit": "^0.28.0-alpha.18"
   },
   "devDependencies": {
     "serverless-offline": "^12.0.4"
