@@ -33,6 +33,12 @@ const gitRepoHandle = (repoObj, messageInfoObj) => {
         .then(() => {
             return writeReadFile(repository, filePath, section, ssotFilePath, messageInfoObj);
         })
+        .then(() => {
+            return commitChanges(repository, filePath, messageInfoObj.user, messageInfoObj.actionType);
+        })
+        .then(() => {
+            return pushCommit(repository, branch);
+        })
 };
 
 // Uses nodeGit asynchronous module to clone a repository from GitHub or opens it if it wasn't cloned previously
@@ -90,6 +96,41 @@ const writeFile = async (fileContent, section, ssotFilePath, messageInfoObj) => 
     const file = fs.openSync(ssotFilePath, 'r+');
     fs.writeSync(file, bufferedText, 0, bufferedText.length, nextTitleIdx);
     fs.close(file);
+};
+
+// Uses nodegit to stage the changes on the ssot file, adds it to the index and creates a commit on the tip of the branch.
+const commitChanges = async (repo, filePath, user, actionType) => {
+    repo.refreshIndex()
+        .then((index) => {
+            return index.addAll()
+                .then(() => {
+                    return index.write();
+                })
+                .then(() => {
+                    return index.writeTree();
+                })
+        })
+        .then(() => {
+            const author = nodeGit.Signature.now("SSOT File Update", "kng@akurey.com");
+            return repo.createCommitOnHead([filePath], author, author, `Update to the ssotFile ${actionType} by ${user}`);
+        });
+};
+
+// Uses nodegit to get a Remote from the repository and pushes the commits to GitHub.
+const pushCommit = async (repo, branch) => {
+    repo.getRemote('origin')
+        .then((remote) => {
+            return remote.push([`+refs/heads/${branch}:refs/heads/${branch}`], {
+                callbacks: {
+                    credentials: function() {
+                        return nodeGit.Cred.userpassPlaintextNew(process.env.GITHUB_TOKEN, "x-oauth-basic");
+                    },
+                    certificateCheck: function() {
+                        return 1;
+                    }
+                }
+            });
+        })
 };
 
 // This method ensures that there is a master branch to pull into
