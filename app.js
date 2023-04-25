@@ -1,6 +1,6 @@
 const { App, AwsLambdaReceiver } = require('@slack/bolt');
 const { FORM_MODAL } = require('./handlers/slackFormHandler');
-const { getChannels, getRepoInfo, getEmails } = require('./handlers/jsonDataHanlder');
+const { getChannels, getRepoInfo, getEmails, getSpecificAction } = require('./handlers/jsonDataHanlder');
 const { getMessageBlock } = require('./handlers/slackMessageHandler');
 const { gitRepoHandle } = require('./utils/githubUtils');
 let userId, message = '';
@@ -46,7 +46,8 @@ app.view({ callback_id: 'SSOTRequest', type: 'view_submission'}, async ({ ack, b
     conversations =  conversations['conversationsAction']['selected_conversations'];
 
     const userName = await getUserName();
-    await gitRepoHandle(getRepoInfo(projectId));
+    const messageInfo = {user: userName, message: message, notes: notes, timestamp: new Date().toISOString(), actionType: getSpecificAction(actionId)};
+    await gitRepoHandle(getRepoInfo(projectId, actionId), messageInfo);
     conversations = await getConversations(conversations, projectId, actionId);
     await publishMessage(userName, projectId, actionId, notes, conversations, message);
 });
@@ -69,8 +70,8 @@ const publishMessage = async (username, project, action, notes, conversations, m
 };
 
 // Request to SLACK API to get the user complete name
-const getUserName = async () => {
-    const username = await app.client.users.info({user: userId});
+const getUserName = async (uId) => {
+    const username = await app.client.users.info({user: uId});
     return username.user.real_name;
 }
 
