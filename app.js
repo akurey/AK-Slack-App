@@ -70,8 +70,8 @@ const publishMessage = async (username, project, action, notes, conversations, m
 };
 
 // Request to SLACK API to get the user complete name
-const getUserName = async (uId) => {
-    const username = await app.client.users.info({user: uId});
+const getUserName = async () => {
+    const username = await app.client.users.info({user: userId});
     return username.user.real_name;
 }
 
