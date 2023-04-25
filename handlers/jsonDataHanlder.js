@@ -10,6 +10,10 @@ const getActions = () => {
     return config['actions'];
 };
 
+const getSpecificAction = (actionId) => {
+    return config['actions'][actionId];
+};
+
 const getEmails = (projectId, actionId) => {
     const projectName = getProjectList()[projectId].toLowerCase();
     const actionType = getActions()[actionId].toLowerCase();
@@ -24,12 +28,14 @@ const getChannels = (projectId, actionId) => {
     return notifications['channels'];
 }
 
-const getRepoInfo = (projectId) => {
+const getRepoInfo = (projectId, actionId) => {
     const projectName = getProjectList()[projectId].toLowerCase();
+    const actionType = getActions()[actionId].toLowerCase();
     const extension = config['projects'][projectName]['extensions']['github'];
     const path = extension['repository'];
     const projectFile = extension['projectFile'];
-    return {repoPath: path, fileInfo: getRepoFileInfo(projectFile)};
+    const section = extension[actionType]['section'];
+    return {repoPath: path, fileInfo: getRepoFileInfo(projectFile), section: section};
 };
 
 const getRepoFileInfo = (filePath) => {
@@ -45,5 +51,6 @@ module.exports = {
     getActions,
     getEmails,
     getChannels,
-    getRepoInfo
+    getRepoInfo,
+    getSpecificAction
 }

@@ -27,16 +27,16 @@
           "repository": "https://github.com/akurey/AK-Projects-Single-Source.git",
           "projectFile" : "https://github.com/akurey/AK-Projects-Single-Source/blob/main/Slack-Application/project-slack-ssot.md",
           "requirement": {
-            "section" : "## Requirements"
+            "section" : "## Requirement"
           },
           "technical": {
-            "section" : "## Technical Notes"
+            "section" : "## Technical"
           },
           "scope": {
             "section" : "## Scope"
           },
           "notes": {
-            "section" : "## Additional Notes"
+            "section" : "## Notes"
           }
         }
       }
