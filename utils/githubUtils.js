@@ -158,7 +158,7 @@ function createMasterBranch(repository, branch) {
 // Formats the message structure for the md file
 const getSSOTUpdate = (messageInfoObj)  => {
     const {user, message, notes, timestamp} = messageInfoObj;
-    return `* ${user} [${timestamp}]\n${(message) ? `\nMessage: ${message}\n\n` : ""}${(notes) ? `Notes: ${notes}\n\n`: ""}`;
+    return `\n* ${user} [${timestamp}]\n${(message) ? `\nMessage: ${message}\n\n` : ""}${(notes) ? `Notes: ${notes}\n\n`: ""}`;
 };
 
 

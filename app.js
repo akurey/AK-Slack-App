@@ -45,13 +45,34 @@ app.view({ callback_id: 'SSOTRequest', type: 'view_submission'}, async ({ ack, b
     notes = notes['notesAction']['value'];
     conversations =  conversations['conversationsAction']['selected_conversations'];
 
-    const userName = await getUserName();
-    const messageInfo = {user: userName, message: message, notes: notes, timestamp: new Date().toISOString(), actionType: getSpecificAction(actionId)};
+    const userName = await getUserName(userId);
+    const messageBlock = await formatMessage(message);
+    const messageInfo = {user: userName, message: messageBlock, notes: notes, timestamp: new Date().toISOString(), actionType: getSpecificAction(actionId)};
+
     await gitRepoHandle(getRepoInfo(projectId, actionId), messageInfo);
     conversations = await getConversations(conversations, projectId, actionId);
     await publishMessage(userName, projectId, actionId, notes, conversations, message);
 });
 
+
+// Handling of slack ``` message/code blocks
+const formatMessage = async (message) => {
+    message = message.replaceAll("```", "\n```\n");
+    return await replaceUsersId(message);
+}
+
+// Replaces all the ocurrance of userId's obtained from slack payload with format <@U...> into the usernames
+const replaceUsersId = async (message) => {
+    const regex = /<@U(\d|\w)+>/g;
+    if (message &&  message.match(regex)) {
+        for (const element of message.match(regex)) {
+            const uid = element.replace(/<@|>/g, '');
+            let username = await getUserName(uid);
+            message = message.replace(element, username);
+        }
+    }
+    return message;
+}
 
 // Request to SLACK PAI to publish a message to the list of channels selected
 const publishMessage = async (username, project, action, notes, conversations, message) => {
@@ -61,7 +82,7 @@ const publishMessage = async (username, project, action, notes, conversations, m
             await app.client.chat.postMessage({
                 text: '',
                 blocks: messageBlock,
-                channel: conversation
+                channel: 'conversation'
             });
         });
     } catch (error) {
@@ -70,8 +91,8 @@ const publishMessage = async (username, project, action, notes, conversations, m
 };
 
 // Request to SLACK API to get the user complete name
-const getUserName = async () => {
-    const username = await app.client.users.info({user: userId});
+const getUserName = async (uid) => {
+    const username = await app.client.users.info({user: uid});
     return username.user.real_name;
 }
 
