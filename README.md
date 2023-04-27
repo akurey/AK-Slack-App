@@ -215,10 +215,9 @@ And set the md file to be modified under `projectFile`:
 ### Add AKUREY Source application to the channels on Slack
 
 1. Go to the desired channel (private or public) and go to the channels settings by clicking on the dropdown menu:
-![Screenshot 2023-04-27 at 11.19.39 AM.png](..%2F..%2F..%2F..%2FDesktop%2FScreenshot%202023-04-27%20at%2011.19.39%20AM.png)
-
+![channel-configuration](./resources/channel-configuration.png)
 2. Go to `Integrations` tab and click on `Add an App`:
-![Screenshot 2023-04-27 at 11.21.58 AM.png](..%2F..%2F..%2F..%2FDesktop%2FScreenshot%202023-04-27%20at%2011.21.58%20AM.png)
+![app-integration](./resources/app-Integration.png)
 3. Search for AKUREY Source app and click on `Add`
 
 
