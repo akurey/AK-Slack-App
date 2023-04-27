@@ -1,5 +1,5 @@
 {
-  "projectList": ["Agex", "Carely"],
+  "projectList": ["Agex"],
   "actions" : ["Requirement", "Technical", "Scope", "Notes"],
   "projects": {
     "agex" : {
@@ -37,45 +37,6 @@
           },
           "notes": {
             "section" : "## Notes"
-          }
-        }
-      }
-    },
-    "carely" : {
-      "active" : true,
-      "notifications" : {
-        "requirement": {
-          "channels": ["akurey-ssot"],
-          "people": ["skopper@akurey.com", "jabarboza@akurey.com"]
-        },
-        "technical": {
-          "channels": ["akurey-ssot"],
-          "people": ["kafay.ng@akurey.com", "skopper@akurey.com"]
-        },
-        "scope": {
-          "channels": ["akurey-ssot"],
-          "people": ["jabarboza@akurey.com", "kafay.ng@akurey.com"]
-        },
-        "notes": {
-          "channels": ["akurey-ssot"],
-          "people": ["skopper@akurey.com", "kafay.ng@akurey.com"]
-        }
-      },
-      "extensions" : {
-        "github": {
-          "repository": "https://github.com/akurey/aktech.git",
-          "projectFile" : "https://github.com/akurey/aktech/blob/master/project-slack-ssot.md",
-          "requirement": {
-            "section" : "## Requirements"
-          },
-          "technical": {
-            "section" : "## Technical Notes"
-          },
-          "scope": {
-            "section" : "## Scope"
-          },
-          "notes": {
-            "section" : "## Additional Notes"
           }
         }
       }
