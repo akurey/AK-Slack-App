@@ -82,7 +82,7 @@ const publishMessage = async (username, project, action, notes, conversations, m
             await app.client.chat.postMessage({
                 text: '',
                 blocks: messageBlock,
-                channel: 'conversation'
+                channel: conversation
             });
         });
     } catch (error) {
