@@ -2,7 +2,7 @@ service: serverless-akurey-source
 frameworkVersion: '3'
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs18.x
   timeout: 30 # maximum of 30 second for api gateway
   environment:
     SLACK_SIGNING_SECRET: ${env:SLACK_SIGNING_SECRET}
@@ -15,7 +15,5 @@ functions:
       - http:
           path: slack/events
           method: post
-  githubUtils:
-    handler: utils/githubUtils.handler
 plugins:
   - serverless-offline

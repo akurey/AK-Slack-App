@@ -80,7 +80,7 @@ const publishMessage = async (username, project, action, notes, conversations, m
         const messageBlock = getMessageBlock(username, project, action, notes, message);
         conversations.map( async conversation => {
             await app.client.chat.postMessage({
-                text: '',
+                text: 'fallback text, check update in SSOTFile',
                 blocks: messageBlock,
                 channel: conversation
             });
