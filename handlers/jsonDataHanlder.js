@@ -35,7 +35,9 @@ const getRepoInfo = (projectId, actionId) => {
     const path = extension['repository'];
     const projectFile = extension['projectFile'];
     const section = extension[actionType]['section'];
-    return {repoPath: path, fileInfo: getRepoFileInfo(projectFile), section: section};
+    const owner = path.split('/').slice(-2)[0];
+    const token = extension['token'];
+    return {repoPath: path, fileInfo: getRepoFileInfo(projectFile), section: section, owner: owner, token: token};
 };
 
 const getRepoFileInfo = (filePath) => {
