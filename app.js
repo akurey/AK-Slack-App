@@ -78,13 +78,13 @@ const replaceUsersId = async (message) => {
 const publishMessage = async (username, project, action, notes, conversations, message) => {
     try {
         const messageBlock = getMessageBlock(username, project, action, notes, message);
-        conversations.map( async conversation => {
+        for (const conversation of conversations) {
             await app.client.chat.postMessage({
                 text: 'fallback text, check update in SSOTFile',
                 blocks: messageBlock,
                 channel: conversation
             });
-        });
+        }
     } catch (error) {
         console.error(error);
     }
