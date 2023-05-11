@@ -8,7 +8,7 @@ const getMessageBlock = (username, projectId, actionId, notes, message) => {
             type: "header",
             text: {
                 type: "plain_text",
-                text: "New SSOT update",
+                text: ":triangular_flag_on_post:New SSOT update",
                 emoji: true
             }
         },
@@ -16,7 +16,7 @@ const getMessageBlock = (username, projectId, actionId, notes, message) => {
             type: "section",
             text: {
                 type: "mrkdwn",
-                text: `*UPDATE FROM:* ${username}\n*PROJECT:* ${project}\n*ACTION TYPE:* ${actionType}\n*MESSAGE:*\n${message}\n*ADDITIONAL NOTES:*\n${notes}`
+                "text": `:mega:*UPDATE FROM:* ${username}\n:desktop_computer:*PROJECT:* ${project}\n:rocket:*ACTION TYPE:* ${actionType}\n:mag_right:*MESSAGE:*\n${message}\n:crystal_ball:*ADDITIONAL NOTES:*\n${notes}`
             },
             accessory: {
                 type: "image",
