@@ -25,7 +25,7 @@
       "extensions" : {
         "github": {
           "repository": "https://github.com/akurey/AK-Projects-Single-Source.git",
-          "token": "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",
+          "token": "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",
           "projectFile" : "https://github.com/akurey/AK-Projects-Single-Source/blob/main/Slack-Application/project-slack-ssot.md",
           "requirement": {
             "section" : "## Requirement"
