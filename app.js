@@ -3,7 +3,7 @@ const { FORM_MODAL } = require('./handlers/slackFormHandler');
 const { getChannels, getRepoInfo, getEmails, getSpecificAction } = require('./handlers/jsonDataHanlder');
 const { getMessageBlock } = require('./handlers/slackMessageHandler');
 const { gitRepoHandle } = require('./utils/githubUtils');
-let userId, message = '';
+let userId, message, imageUrl = '';
 
 // Initialize custom receiver
 const awsLambdaReceiver = new AwsLambdaReceiver({
@@ -26,10 +26,12 @@ app.shortcut('messageUpdateSSOT', async ({ shortcut, ack, client, logger }) => {
             view: FORM_MODAL
         });
 
-         userId = shortcut.user.id;
-         if (shortcut.message.text !== undefined || shortcut.message.text !== null) {
-             message = shortcut.message.text;
-         }
+        userId = shortcut.user.id;
+        imageUrl = shortcut.message['files'][0]['thumb_480'];
+
+        if (shortcut.message.text !== undefined || shortcut.message.text !== null) {
+         message = shortcut.message.text;
+        }
     } catch (error) {
         console.error(error);
     }
@@ -61,7 +63,7 @@ const formatMessage = async (message) => {
     return await replaceUsersId(message);
 }
 
-// Replaces all the ocurrance of userId's obtained from slack payload with format <@U...> into the usernames
+// Replaces all the occurrence of userId's obtained from slack payload with format <@U...> into the usernames
 const replaceUsersId = async (message) => {
     const regex = /<@U(\d|\w)+>/g;
     if (message &&  message.match(regex)) {
@@ -77,7 +79,7 @@ const replaceUsersId = async (message) => {
 // Request to SLACK PAI to publish a message to the list of channels selected
 const publishMessage = async (username, project, action, notes, conversations, message) => {
     try {
-        const messageBlock = getMessageBlock(username, project, action, notes, message);
+        const messageBlock = getMessageBlock(username, project, action, notes, message, imageUrl);
         for (const conversation of conversations) {
             await app.client.chat.postMessage({
                 text: 'fallback text, check update in SSOTFile',
@@ -110,7 +112,7 @@ const getConversations = async (conversations, projectId, actionId) => {
     });
 
     /**
-     * This for was implemented this way since there is a known bug on the slack apy where
+     * This for was implemented this way since there is a known bug on the slack api where
      * if the application has joined the channels, requesting the api
      * conversations.list with parameter: types = "private_channel,public_channel" only returns public channels
      * instead of both public and private channels

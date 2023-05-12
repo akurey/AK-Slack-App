@@ -1,6 +1,6 @@
 const { getProjectList, getActions } = require('./jsonDataHanlder');
 
-const getMessageBlock = (username, projectId, actionId, notes, message) => {
+const getMessageBlock = (username, projectId, actionId, notes, message, imageUrl) => {
     const project = getProjectList()[projectId];
     const actionType = getActions()[actionId];
     const messageBlock = [
@@ -20,8 +20,8 @@ const getMessageBlock = (username, projectId, actionId, notes, message) => {
             },
             accessory: {
                 type: "image",
-                image_url: "https://api.slack.com/img/blocks/bkb_template_images/approvalsNewDevice.png",
-                alt_text: "computer thumbnail"
+                image_url: imageUrl,
+                alt_text: "Question everything, build anything"
             }
         }
     ];
