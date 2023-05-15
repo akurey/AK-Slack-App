@@ -7,9 +7,8 @@ const gitRepoHandle = (repoObj, messageInfoObj) => {
     const section = repoObj['section'];
     const owner = repoObj['owner'];
     const repoName = repoPath.slice(repoPath.lastIndexOf('/') + 1).replace('.git', '');
-    const authToken = repoObj['token'];
     const octokit = new Octokit({
-        auth: authToken,
+        auth: process.env.GITHUB_TOKEN,
         userAgent: 'AKUREY Source'
     });
 
