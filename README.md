@@ -203,7 +203,7 @@ Note: The md file which is being reference must exist, and it should already hav
 ### Define github extension
 
 Under the project extension add `github` and define the repository link with .git gotten from GitHub HTTPS
-![Screenshot 2023-04-27 at 11.11.59 AM.png](..%2F..%2F..%2F..%2F..%2F..%2Fvar%2Ffolders%2F_x%2F70_0g6s513l10xhb5tkc22pr0000gn%2FT%2FTemporaryItems%2FNSIRD_screencaptureui_6yjD27%2FScreenshot%202023-04-27%20at%2011.11.59%20AM.png)
+![repository-configuration](./resources/repo-path.png)
 And set the md file to be modified under `projectFile`:
 ```
 "extensions" : {
@@ -211,6 +211,9 @@ And set the md file to be modified under `projectFile`:
           "repository": "https://github.com/akurey/AK-Projects-Single-Source.git",
           "projectFile" : "https://github.com/akurey/AK-Projects-Single-Source/blob/main/Slack-Application/project-slack-ssot.md",
 ```
+
+Note: The user from which the GitHub token is gotten from must be added as a collaborator on the repository with the role: `write` under the repository settings -> Collaborators and teams tab.
+![github-repository-collaborator](./resources/repo-collaborator-setting.png)
 
 ### Add AKUREY Source application to the channels on Slack
 
