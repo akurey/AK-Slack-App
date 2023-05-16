@@ -13,7 +13,7 @@ const FORM_MODAL = JSON.stringify({
     type: 'modal',
     title: {
         type: 'plain_text',
-        text: 'Project Update Form'
+        text: 'PUF'
     },
     callback_id: 'SSOTRequest',
     submit: {
