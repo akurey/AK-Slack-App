@@ -49,12 +49,13 @@ app.shortcut('messageUpdateSSOT', async ({ shortcut, ack, client, logger }) => {
 // Handles view submission request with the callback id from the modal/form
 app.view({ callback_id: 'SSOTRequest', type: 'view_submission'}, async ({ ack, body, view, client, logger }) => {
     await ack();
+    let projectId, actionId, notes, conversations;
+    const viewValues = Object.values(view.state.values);
 
-    let [projectId, actionId, notes, conversations] = Object.values(view.state.values);
-    projectId = projectId['projectSelect']['selected_option']['value'];
-    actionId = actionId['actionSelect']['selected_option']['value'];
-    notes = notes['notesAction']['value'];
-    conversations =  conversations['conversationsAction']['selected_conversations'];
+    projectId = findObjectProperty(viewValues, "projectSelect")['selected_option']['value'];
+    actionId = findObjectProperty(viewValues, "actionSelect")['selected_option']['value'];
+    notes = findObjectProperty(viewValues, "notesAction")['value'];
+    conversations = findObjectProperty(viewValues, "conversationsAction")['selected_conversations'];
 
     const userName = await getUserName(userId);
     const messageBlock = await formatMessage(message);
@@ -64,7 +65,6 @@ app.view({ callback_id: 'SSOTRequest', type: 'view_submission'}, async ({ ack, b
     conversations = await getConversations(conversations, projectId, actionId);
     await publishMessage(userName, projectId, actionId, notes, conversations, message);
 });
-
 
 // Handling of slack ``` message/code blocks
 const formatMessage = async (message) => {
@@ -177,6 +177,10 @@ const getPublicChannelId = async (channelName) => {
 const removeDuplicates = (arr) => {
     return arr.filter((item, index) => arr.indexOf(item) === index);
 }
+
+const findObjectProperty = (obj, prop) => {
+    return obj.find((obj) => obj.hasOwnProperty(prop))[prop]
+};
 
 // Handle Lambda function event
 module.exports.handler = async (event, context, callback) => {

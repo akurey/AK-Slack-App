@@ -69,7 +69,6 @@ const FORM_MODAL = JSON.stringify({
         },
         {
             type: "input",
-            block_id: "additionalNotesSection",
             element: {
                 type: "plain_text_input",
                 action_id: "notesAction",
@@ -87,7 +86,6 @@ const FORM_MODAL = JSON.stringify({
         },
         {
             type: "section",
-            block_id: "conversationsSection",
             text: {
                 type: "mrkdwn",
                 text: "Additional notification to: "
