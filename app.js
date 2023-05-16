@@ -4,6 +4,7 @@ const { getChannels, getRepoInfo, getEmails, getSpecificAction } = require('./ha
 const { getMessageBlock } = require('./handlers/slackMessageHandler');
 const { gitRepoHandle } = require('./utils/githubUtils');
 let userId, message = '';
+let imageList;
 
 // Initialize custom receiver
 const awsLambdaReceiver = new AwsLambdaReceiver({
@@ -24,6 +25,13 @@ app.shortcut('messageUpdateSSOT', async ({ shortcut, ack, client, logger }) => {
         await client.views.open({
             trigger_id: shortcut.trigger_id,
             view: FORM_MODAL
+        });
+
+        const imageFiles = shortcut.message.files;
+
+        imageList = [];
+        imageFiles.map((imageFile) => {
+            imageList.push({name: imageFile.name, url: imageFile.url_private})
         });
 
          userId = shortcut.user.id;
@@ -77,7 +85,7 @@ const replaceUsersId = async (message) => {
 // Request to SLACK PAI to publish a message to the list of channels selected
 const publishMessage = async (username, project, action, notes, conversations, message) => {
     try {
-        const messageBlock = getMessageBlock(username, project, action, notes, message);
+        const messageBlock = getMessageBlock(username, project, action, notes, message, imageList);
         for (const conversation of conversations) {
             await app.client.chat.postMessage({
                 text: 'fallback text, check update in SSOTFile',

@@ -1,6 +1,6 @@
 const { getProjectList, getActions } = require('./jsonDataHanlder');
 
-const getMessageBlock = (username, projectId, actionId, notes, message) => {
+const getMessageBlock = (username, projectId, actionId, notes, message, imageList) => {
     const project = getProjectList()[projectId];
     const actionType = getActions()[actionId];
     const messageBlock = [
@@ -16,7 +16,7 @@ const getMessageBlock = (username, projectId, actionId, notes, message) => {
             type: "section",
             text: {
                 type: "mrkdwn",
-                "text": `:mega:*UPDATE FROM:* ${username}\n:desktop_computer:*PROJECT:* ${project}\n:rocket:*ACTION TYPE:* ${actionType}\n:mag_right:*MESSAGE:*\n${message}\n:crystal_ball:*ADDITIONAL NOTES:*\n${notes}`
+                text: `:mega:*UPDATE FROM:* ${username}\n:desktop_computer:*PROJECT:* ${project}\n:rocket:*ACTION TYPE:* ${actionType}\n:mag_right:*MESSAGE:*\n${message}\n:crystal_ball:*ADDITIONAL NOTES:*\n${notes}`
             },
             accessory: {
                 type: "image",
@@ -25,7 +25,29 @@ const getMessageBlock = (username, projectId, actionId, notes, message) => {
             }
         }
     ];
-    return messageBlock;
+    return getImageSection(imageList, messageBlock);
 }
+
+const getImageSection = (imageList, messageBlock) => {
+    if (imageList) {
+        let imageProperty;
+        imageList.map ((image) =>{
+            imageProperty = {
+                type: "section",
+                text: {
+                    type: "mrkdwn",
+                    text: `<${image.url}|${image.name}>`
+                },
+                accessory: {
+                    type: "image",
+                    image_url: image.url,
+                    alt_text: image.name
+                }
+            };
+            messageBlock.push(imageProperty);
+        });
+    };
+    return messageBlock;
+};
 
 module.exports = { getMessageBlock }
