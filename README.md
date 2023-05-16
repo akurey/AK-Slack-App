@@ -235,5 +235,5 @@ Note: contact Soledad Kopper or Jose Barboza for the tokens file.
 
 After exporting the tokens, run:
 ```
-serverless deploy
+serverless deploy --stage [dev/qa/prod]
 ```
