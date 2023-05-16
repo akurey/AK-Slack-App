@@ -8,7 +8,7 @@ const getMessageBlock = (username, projectId, actionId, notes, message) => {
             type: "header",
             text: {
                 type: "plain_text",
-                text: ":triangular_flag_on_post:New SSOT update",
+                text: ":triangular_flag_on_post:PUF",
                 emoji: true
             }
         },
