@@ -29,12 +29,15 @@ app.shortcut('messageUpdateSSOT', async ({ shortcut, ack, client, logger }) => {
 
         const imageFiles = shortcut.message.files;
 
-        imageList = [];
-        imageFiles.map((imageFile) => {
-            imageList.push({name: imageFile.name, url: imageFile.url_private})
-        });
+        if (imageFiles) {
+            imageList = [];
+            imageFiles.map((imageFile) => {
+                imageList.push({name: imageFile.name, url: imageFile.url_private})
+            });
+        }
 
          userId = shortcut.user.id;
+
          if (shortcut.message.text !== undefined || shortcut.message.text !== null) {
              message = shortcut.message.text;
          }

@@ -32,39 +32,39 @@ const FORM_MODAL = JSON.stringify({
             type: "divider"
         },
         {
-            type: "section",
-            block_id: "projectSelectionSection",
-            text: {
-                type: "mrkdwn",
-                text: "*Project name*"
-            },
-            accessory: {
+            type: "input",
+            element: {
                 type: "static_select",
-                action_id: "projectSelect",
                 placeholder: {
                     type: "plain_text",
-                    emoji: true,
-                    text: "Projects"
+                    text: "Projects",
+                    emoji: true
                 },
-                options: addOptions(getProjectList())
+                options: addOptions(getProjectList()),
+                action_id: "projectSelect"
+            },
+            label: {
+                type: "plain_text",
+                text: "Project name",
+                emoji: true
             }
         },
         {
-            type: "section",
-            block_id: "actionTypeSection",
-            text: {
-                type: "mrkdwn",
-                text: "*Action type*"
-            },
-            accessory: {
+            type: "input",
+            element: {
                 type: "static_select",
-                action_id: "actionSelect",
                 placeholder: {
                     type: "plain_text",
-                    emoji: true,
-                    text: "Actions"
+                    text: "Actions",
+                    emoji: true
                 },
-                options: addOptions(getActions())
+                options: addOptions(getActions()),
+                action_id: "actionSelect"
+            },
+            label: {
+                type: "plain_text",
+                text: "Action type",
+                emoji: true
             }
         },
         {
