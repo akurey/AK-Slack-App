@@ -85,12 +85,8 @@ const FORM_MODAL = JSON.stringify({
             type: "divider"
         },
         {
-            type: "section",
-            text: {
-                type: "mrkdwn",
-                text: "Additional notification to: "
-            },
-            accessory: {
+            type: "input",
+            element: {
                 type: "multi_conversations_select",
                 placeholder: {
                     type: "plain_text",
@@ -98,6 +94,11 @@ const FORM_MODAL = JSON.stringify({
                     emoji: true
                 },
                 action_id: "conversationsAction"
+            },
+            label: {
+                type: "plain_text",
+                text: "Additional notification to: ",
+                emoji: true
             }
         }
     ]
