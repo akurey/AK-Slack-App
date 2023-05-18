@@ -86,6 +86,7 @@ const FORM_MODAL = JSON.stringify({
         },
         {
             type: "input",
+            optional: true,
             element: {
                 type: "multi_conversations_select",
                 placeholder: {

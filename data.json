@@ -30,13 +30,13 @@
             "section" : "## Requirement"
           },
           "technical": {
-            "section" : "## Technical"
+            "section": "## Technical"
           },
           "scope": {
-            "section" : "## Scope"
+            "section": "## Scope"
           },
           "notes": {
-            "section" : "## Notes"
+            "section": "## Notes"
           }
         }
       }

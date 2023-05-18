@@ -61,7 +61,7 @@ app.view({ callback_id: 'SSOTRequest', type: 'view_submission'}, async ({ ack, b
     const messageBlock = await formatMessage(message);
     const messageInfo = {user: userName, message: messageBlock, notes: notes, timestamp: new Date().toISOString(), actionType: getSpecificAction(actionId)};
 
-    await gitRepoHandle(getRepoInfo(projectId, actionId), messageInfo);
+    await gitRepoHandle(getRepoInfo(projectId, actionId), messageInfo, imageList);
     conversations = await getConversations(conversations, projectId, actionId);
     await publishMessage(userName, projectId, actionId, notes, conversations, message);
 });

@@ -1,6 +1,6 @@
 const { Octokit } = require("@octokit/rest");
 
-const gitRepoHandle = (repoObj, messageInfoObj) => {
+const gitRepoHandle = (repoObj, messageInfoObj, imageList) => {
     const repoPath = repoObj['repoPath'];
     const branch = repoObj['fileInfo']['branchName'];
     const filePath = repoObj['fileInfo']['filePath'];
@@ -17,7 +17,7 @@ const gitRepoHandle = (repoObj, messageInfoObj) => {
     getFileContent(octokit, owner, repoName, branch, filePath)
     .then(result => {
         ssotFile = result;
-        return writeContent(ssotFile.content, section, messageInfoObj);
+        return writeContent(ssotFile.content, section, messageInfoObj, imageList);
     }).then((content) => {
         return updateRepoFileContent(octokit, owner, repoName, branch, filePath, messageInfoObj.actionType, content, ssotFile.sha);
     });
@@ -39,8 +39,14 @@ const getFileContent = async (octokit, owner, repoName, branch, filePath) => {
 };
 
 // Writes new update under a section on the md file
-function writeContent(fileContent, section, messageInfoObj) {
-    const ssotUpdate = getSSOTUpdate(messageInfoObj);
+function writeContent(fileContent, section, messageInfoObj, imageList) {
+    let ssotUpdate = getSSOTUpdate(messageInfoObj);
+
+    if (imageList) {
+        for (const image of imageList) {
+            ssotUpdate += `\n[${image.name}](${image.url})\n`;
+        }
+    }
     // Get the position of the action type section and the position of next section
     const index = fileContent.indexOf(section);
     const nexTitleIdx = fileContent.indexOf('\n## ', index+1);
